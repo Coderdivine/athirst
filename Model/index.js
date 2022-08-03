@@ -20,13 +20,18 @@ const Emailath = new Schema({
         type:String,
         required:true
     },
-    
+    message:{
+        type:String,
+        required:true
+    },
     date:{
         type:Date,
-        default:Date.now() + 3600000
+        default:Date.now()
     }
-})
-const PhotosSchema = mongoose.model("PhotosSchema",Photos);
+});
+const EmailathSchema = mongoose.model("Emailath",Emailath);
+const PhotosSchema = mongoose.model("Photosath",Photos);
 module.exports = {
-    PhotosSchema
+    PhotosSchema,
+    EmailathSchema
 };

@@ -10,15 +10,69 @@ const mongoose = require("mongoose");
 //process.env.AUTH_URI ||
 mongoose.connect('mongodb://localhost:27017/users');
 const port = process.env.PORT || 5099;
-const db = mongoose.connection
+const db = mongoose.connection;
+const cloudinary = require('cloudinary').v2;
+cloudinary.config({
+  secure: true
+});
 db.on("error",(err)=>{console.log(err)})
 db.once("open",()=> console.log("Connected to database"))
+const { PhotosSchema,EmailathSchema} = require("./Model/index.js")
+app.psot("/post-img",(req,res)=>{
+    let {img} = req.body;
+    UploadImage(img).then(result=>{
+        const PhotosSchemas = new PhotosSchema({
+            img:result,
+            date:Date.now()
+        });
+        PhotosSchemas.save().then(corn=>{
+            res.status(201).json({
+                message:"Image saved",
+                status:201
+            })
+        })
+    }).catch(err=>{
+            res.status(400).json({
+                message:err,
+                status:400
+            })
+        })
+});
+app.get("/get-img",(req,res)=>{
+   PhotosSchema.find().then(result=>{
+    if(!result.length){
+        res.status(400).json({
+            message:"No image found",
+            status:400
+        })
+    }else{
+        res.status(200).json({
+            message:"Image found",
+            data:result
+        })
+    }
+   })
+});
 
 
 
-
-
-
+async function UploadImage(imagePath){
+    const options = {
+        use_filename: true,
+        unique_filename: false,
+        overwrite: true,
+      };
+  
+      try {
+        // Upload the image
+        const result = await cloudinary.uploader.upload(imagePath, options);
+        console.log(result);
+        return result.public_id;
+      } catch (error) {
+        console.error(error);
+      }
+}
+// s
 app.listen(port, () => {
     console.log(`My Server is running on http://localhost:${port}`);
    }) 
