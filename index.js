@@ -8,7 +8,8 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 const mongoose = require("mongoose");
 //process.env.AUTH_URI ||
-mongoose.connect('mongodb://localhost:27017/athirst');
+//mongodb://localhost:27017/athirst
+mongoose.connect(process.env.AUTH_URI);
 const port = process.env.PORT || 5099;
 const db = mongoose.connection;
 const cloudinary = require('cloudinary').v2;
