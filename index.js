@@ -59,7 +59,7 @@ app.get("/get-img",(req,res)=>{
     }
    })
 });
-app.post("/response",(req,res)=>{
+app.post("/post-mail",(req,res)=>{
     let {name,email,message} = req.body;
     const EmailathSchemas =new EmailathSchema({
         name,
@@ -73,7 +73,7 @@ app.post("/response",(req,res)=>{
         })
     })
 })
-app.get("/post-mail",(req,res)=>{
+app.get("/get-mail",(req,res)=>{
     EmailathSchema.find().then(corn=>{
         if(!corn){
             res.status(400).json({
