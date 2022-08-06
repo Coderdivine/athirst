@@ -8,17 +8,21 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 const mongoose = require("mongoose");
 //process.env.AUTH_URI ||
-mongoose.connect('mongodb://localhost:27017/users');
+mongoose.connect('mongodb://localhost:27017/athirst');
 const port = process.env.PORT || 5099;
 const db = mongoose.connection;
 const cloudinary = require('cloudinary').v2;
+
 cloudinary.config({
-  secure: true
+  secure: true,
+  cloud_name: 'axgura', 
+  api_key:process.env.API_KEY, 
+  api_secret:process.env.API_SK,
 });
 db.on("error",(err)=>{console.log(err)})
 db.once("open",()=> console.log("Connected to database"))
 const { PhotosSchema,EmailathSchema} = require("./Model/index.js")
-app.psot("/post-img",(req,res)=>{
+app.post("/post-img",(req,res)=>{
     let {img} = req.body;
     UploadImage(img).then(result=>{
         const PhotosSchemas = new PhotosSchema({
@@ -53,9 +57,35 @@ app.get("/get-img",(req,res)=>{
     }
    })
 });
-
-
-
+app.post("/response",(req,res)=>{
+    let {name,email,message} = req.body;
+    const EmailathSchemas =new EmailathSchema({
+        name,
+        email,
+        message
+    });
+    EmailathSchemas.save().then(corn=>{
+        res.status(201).json({
+            message:"Image saved",
+            status:201
+        })
+    })
+})
+app.get("/post-mail",(req,res)=>{
+    EmailathSchema.find().then(corn=>{
+        if(!corn){
+            res.status(400).json({
+                message:"No response found",
+                status:400
+            })
+        }else{
+            res.status(200).json({
+                message:"Response found",
+                data:corn
+            })
+        }
+    })
+})
 async function UploadImage(imagePath){
     const options = {
         use_filename: true,
@@ -72,7 +102,6 @@ async function UploadImage(imagePath){
         console.error(error);
       }
 }
-// s
 app.listen(port, () => {
     console.log(`My Server is running on http://localhost:${port}`);
-   }) 
+   });

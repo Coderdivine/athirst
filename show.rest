@@ -1,0 +1,21 @@
+###
+GET http://localhost:5099/wallets/supported-coins
+Content-Type: application/json
+
+{
+    "network":"bsc"
+}
+###
+POST http://localhost:5099/wallets/withdraw-to-external
+Content-Type: application/json
+
+{
+    "sender":"0x0",
+    "amount":"1",
+    "reciever":"0x0",
+    "network":"bsc",
+    "password":"common@2",
+    "coin":"ETH",
+    "ide":"a46acbce-dc28-497c-8990-2b592ef639e7"
+}
+###
