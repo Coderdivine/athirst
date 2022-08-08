@@ -27,9 +27,8 @@ app.post("/post-img",(req,res)=>{
     // const formData = FormData();
     // const imgs = formData.append("img","./Model/ngo")
     let {img} = req.body;
-    UploadImage(img).then(result=>{
         const PhotosSchemas = new PhotosSchema({
-            img:result,
+            img,
             date:Date.now()
         });
         PhotosSchemas.save().then(corn=>{
@@ -37,13 +36,12 @@ app.post("/post-img",(req,res)=>{
                 message:"Image saved",
                 status:201
             })
-        })
-    }).catch(err=>{
+        }).catch(err=>{
             res.status(400).json({
                 message:err,
                 status:400
-            })
-        })
+            });
+        });
 });
 app.get("/get-img",(req,res)=>{
    PhotosSchema.find().then(result=>{
