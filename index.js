@@ -67,7 +67,7 @@ app.post("/post-mail",(req,res)=>{
     });
     EmailathSchemas.save().then(corn=>{
         res.status(201).json({
-            message:"Image saved",
+            message:"Message sent",
             status:201
         })
     })
